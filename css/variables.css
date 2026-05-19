@@ -1,0 +1,108 @@
+/* ==============================================
+   ESMALTALE — VARIÁVEIS E RESET
+   ============================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Cores principais */
+  --color-primary:       #e8197a;
+  --color-primary-hover: #ff3d9a;
+  --color-primary-dark:  #c4006e;
+  --color-pink-light:    #ffadd1;
+  --color-pink-lighter:  #ffd1e8;
+
+  /* Superfícies (tema claro) */
+  --color-bg:      #f7f0f4;
+  --color-surface: #ffffff;
+  --color-surface2:#fdf5f9;
+
+  /* Textos (tema claro) */
+  --color-text-primary:   #1a0d13;
+  --color-text-secondary: #8a4060;
+  --color-text-muted:     #c47090;
+
+  /* Bordas (tema claro) */
+  --color-border:       #ffd6ec;
+  --color-border-strong:#ffadd1;
+
+  /* Status */
+  --color-uso-bg:   #ffe5f2;
+  --color-uso-text: #a3005a;
+  --color-man-bg:   #faeeda;
+  --color-man-text: #633806;
+  --color-disp-bg:  #eaf3de;
+  --color-disp-text:#27500a;
+
+  /* Tipografia */
+  --font-sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Courier New', monospace;
+
+  /* Bordas arredondadas */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* Transições */
+  --transition-fast: .15s ease;
+  --transition-base: .2s ease;
+  --transition-slow: .3s ease;
+}
+
+/* ==============================================
+   TEMA ESCURO
+   ============================================== */
+.dark-mode {
+  --color-primary:       #ff3d9a;
+  --color-primary-hover: #ff6ab4;
+  --color-primary-dark:  #e8197a;
+
+  --color-bg:      #0e070b;
+  --color-surface: #1a0d15;
+  --color-surface2:#221018;
+
+  --color-text-primary:   #faeef5;
+  --color-text-secondary: #d4a0bb;
+  --color-text-muted:     #8a6070;
+
+  --color-border:       #3d1e30;
+  --color-border-strong:#6a3355;
+
+  --color-uso-bg:   #6e003f;
+  --color-uso-text: #ffb3d6;
+  --color-man-bg:   #4a2800;
+  --color-man-text: #ffc875;
+  --color-disp-bg:  #1a3d08;
+  --color-disp-text:#a8e070;
+}
+
+/* ==============================================
+   BASE
+   ============================================== */
+body {
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  min-height: 100vh;
+  transition: background var(--transition-slow), color var(--transition-slow);
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--color-bg);
+  transition: background var(--transition-slow);
+}
+
+.body-wrap {
+  display: flex;
+  flex: 1;
+  background: var(--color-bg);
+  transition: background var(--transition-slow);
+}

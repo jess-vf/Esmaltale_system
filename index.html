@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Esmaltale — Gestão de Materiais</title>
+
+  <!-- Dependências externas -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
+
+  <!-- Estilos do sistema -->
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/login.css" />
+  <link rel="stylesheet" href="css/swal.css" />
+</head>
+<body>
+
+<div id="app" class="app">
+
+  <!-- ===== TOPBAR ===== -->
+  <header class="topbar gradient-animated">
+    <a class="topbar__logo" href="#" aria-label="Esmaltale — página inicial">
+      <svg class="topbar__logo-svg" viewBox="0 0 80 72" fill="none"
+           xmlns="http://www.w3.org/2000/svg" width="42" aria-hidden="true">
+        <style>
+          @keyframes lotusBreath { 0%,100%{transform:scaleY(1) translateY(0)} 50%{transform:scaleY(1.06) translateY(-1.5px)} }
+          @keyframes lotusSwayL  { 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(-5deg)} }
+          @keyframes lotusSwayR  { 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(5deg)} }
+          @keyframes lotusSwayLL { 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(-9deg)} }
+          @keyframes lotusSwayRR { 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(9deg)} }
+          .lp-c  { transform-origin:40px 52px; animation:lotusBreath 3.5s ease-in-out infinite }
+          .lp-il { transform-origin:28px 52px; animation:lotusSwayL  3.5s ease-in-out infinite 0.1s }
+          .lp-ir { transform-origin:52px 52px; animation:lotusSwayR  3.5s ease-in-out infinite 0.1s }
+          .lp-ol { transform-origin:16px 52px; animation:lotusSwayLL 3.5s ease-in-out infinite 0.2s }
+          .lp-or { transform-origin:64px 52px; animation:lotusSwayRR 3.5s ease-in-out infinite 0.2s }
+          .lp-lf { transform-origin:40px 64px; animation:lotusBreath 4s   ease-in-out infinite 0.3s }
+        </style>
+        <path class="lp-lf" d="M18 62 Q40 54 62 62 Q40 70 18 62Z" fill="white" opacity="0.35"/>
+        <path class="lp-ol" d="M18 52 Q10 36 20 22 Q22 38 28 50Z" fill="white" opacity="0.55"/>
+        <path class="lp-or" d="M62 52 Q70 36 60 22 Q58 38 52 50Z" fill="white" opacity="0.55"/>
+        <path class="lp-il" d="M28 52 Q22 30 32 14 Q36 32 36 50Z" fill="white" opacity="0.78"/>
+        <path class="lp-ir" d="M52 52 Q58 30 48 14 Q44 32 44 50Z" fill="white" opacity="0.78"/>
+        <path class="lp-c"  d="M36 52 Q36 22 40 8  Q44 22 44 52Z" fill="white" opacity="1.0"/>
+        <path d="M22 58 Q40 66 58 58" stroke="white" stroke-width="1.8" fill="none" opacity="0.5" stroke-linecap="round"/>
+      </svg>
+      <div class="topbar__logo-text">
+        Esmaltale
+        <small>especialistas em unhas</small>
+      </div>
+    </a>
+
+    <div class="topbar__actions">
+      <button id="btn-theme" class="icon-btn" title="Alternar tema">
+        <i id="theme-icon" class="ti ti-moon"></i>
+      </button>
+      <button class="icon-btn icon-btn--notif" title="Notificações">
+        <i class="ti ti-bell"></i>
+        <span class="icon-btn__badge" aria-hidden="true"></span>
+      </button>
+      <button class="user-chip" aria-label="Perfil de Ana Lima">
+        <span class="user-chip__avatar" aria-hidden="true">AL</span>
+        <span class="user-chip__name">Ana Lima</span>
+      </button>
+      <button id="btn-logout" class="icon-btn" title="Sair">
+        <i class="ti ti-logout"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="body-wrap">
+
+    <!-- Tooltip global da sidebar -->
+    <div id="sidebar-tooltip" class="sidebar__tooltip" role="tooltip" aria-hidden="true"></div>
+
+    <!-- ===== SIDEBAR ===== -->
+    <nav class="sidebar" aria-label="Navegação principal">
+      <button class="sidebar__btn is-active" data-page="alicates" title="Alicates">
+        <i class="ti ti-scissors" aria-hidden="true"></i>
+      </button>
+      <button class="sidebar__btn" data-page="canetas" title="Canetas">
+        <i class="ti ti-pencil" aria-hidden="true"></i>
+      </button>
+      <button class="sidebar__btn" data-page="motores" title="Motores">
+        <i class="ti ti-engine" aria-hidden="true"></i>
+      </button>
+      <button class="sidebar__btn" data-page="cabines" title="Cabines">
+        <i class="ti ti-box" aria-hidden="true"></i>
+      </button>
+      <button class="sidebar__btn" data-page="sugadores" title="Sugadores">
+        <i class="ti ti-air-conditioning" aria-hidden="true"></i>
+      </button>
+      <div class="sidebar__divider" aria-hidden="true"></div>
+      <button class="sidebar__btn" data-page="movimentacoes" title="Movimentações">
+        <i class="ti ti-arrows-exchange" aria-hidden="true"></i>
+      </button>
+    </nav>
+
+    <!-- ===== CONTEÚDO PRINCIPAL ===== -->
+    <main class="main">
+
+      <!-- Páginas de materiais: HTML interno gerado por buildMaterialPage() em materials.js -->
+      <section class="page is-active" id="pg-alicates"
+               data-key="alicates"   data-prefix="ALC"
+               data-label="Alicates" data-icon="ti-scissors"></section>
+
+      <section class="page" id="pg-canetas"
+               data-key="canetas"  data-prefix="CAN"
+               data-label="Canetas" data-icon="ti-pencil"></section>
+
+      <section class="page" id="pg-motores"
+               data-key="motores"  data-prefix="MOT"
+               data-label="Motores" data-icon="ti-engine"></section>
+
+      <section class="page" id="pg-cabines"
+               data-key="cabines"  data-prefix="CAB"
+               data-label="Cabines" data-icon="ti-box"></section>
+
+      <section class="page" id="pg-sugadores"
+               data-key="sugadores"  data-prefix="SUG"
+               data-label="Sugadores" data-icon="ti-air-conditioning"></section>
+
+      <!-- Página de movimentações (HTML estático) -->
+      <section class="page" id="pg-movimentacoes">
+        <div class="page-header">
+          <div class="page-header__left">
+            <div class="page-header__icon">
+              <i class="ti ti-arrows-exchange" aria-hidden="true"></i>
+            </div>
+            <div>
+              <h2 class="page-header__title">Movimentações</h2>
+              <p class="page-header__subtitle">
+                Histórico de transferências, trocas de responsável e manutenções
+              </p>
+            </div>
+          </div>
+          <button class="btn-primary gradient-animated" data-action="export">
+            <i class="ti ti-download" aria-hidden="true"></i> Exportar
+          </button>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-card__icon stat-card__icon--total">
+              <i class="ti ti-arrows-exchange" aria-hidden="true"></i>
+            </div>
+            <div>
+              <div class="stat-card__number">18</div>
+              <div class="stat-card__label">Movimentações no mês</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__icon stat-card__icon--uso">
+              <i class="ti ti-building-store" aria-hidden="true"></i>
+            </div>
+            <div>
+              <div class="stat-card__number">5</div>
+              <div class="stat-card__label">Transferências entre unidades</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__icon stat-card__icon--man">
+              <i class="ti ti-tool" aria-hidden="true"></i>
+            </div>
+            <div>
+              <div class="stat-card__number">3</div>
+              <div class="stat-card__label">Em manutenção agora</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <div class="search-field">
+            <i class="ti ti-search search-field__icon" aria-hidden="true"></i>
+            <input class="search-field__input" type="text"
+                   data-action="filter-mov"
+                   placeholder="Buscar código ou material..." />
+          </div>
+          <select class="filter-select" data-action="filter-mov" data-filter="material">
+            <option value="">Todos os materiais</option>
+            <option>Alicates</option>
+            <option>Canetas</option>
+            <option>Motores</option>
+            <option>Cabines</option>
+            <option>Sugadores</option>
+          </select>
+          <select class="filter-select" data-action="filter-mov" data-filter="type">
+            <option value="">Todos os tipos</option>
+            <option>Transferência</option>
+            <option>Troca responsável</option>
+            <option>Manutenção</option>
+            <option>Retorno</option>
+          </select>
+        </div>
+
+        <div class="table-card" id="mov-list">
+          <article class="mov-item" data-type="Transferência">
+            <div class="mov-item__icon mov-item__icon--transfer" aria-hidden="true">
+              <i class="ti ti-building-store"></i>
+            </div>
+            <div class="mov-item__body">
+              <div class="mov-item__title">ALC-001 — Transferência de unidade</div>
+              <div class="mov-item__meta">Shopping Bela Vista → Shopping Barra · por Ana Lima</div>
+            </div>
+            <time class="mov-item__date">Hoje, 10:30</time>
+          </article>
+
+          <article class="mov-item" data-type="Troca responsável">
+            <div class="mov-item__icon mov-item__icon--person" aria-hidden="true">
+              <i class="ti ti-user"></i>
+            </div>
+            <div class="mov-item__body">
+              <div class="mov-item__title">CAN-002 — Troca de responsável</div>
+              <div class="mov-item__meta">Carol Santos → Juliana Melo · Alameda Shopping</div>
+            </div>
+            <time class="mov-item__date">Hoje, 08:15</time>
+          </article>
+
+          <article class="mov-item" data-type="Manutenção">
+            <div class="mov-item__icon mov-item__icon--repair" aria-hidden="true">
+              <i class="ti ti-tool"></i>
+            </div>
+            <div class="mov-item__body">
+              <div class="mov-item__title">MOT-002 — Enviado para manutenção</div>
+              <div class="mov-item__meta">Responsável: Juliana Melo · Shopping Barra</div>
+            </div>
+            <time class="mov-item__date">Ontem, 17:00</time>
+          </article>
+
+          <article class="mov-item" data-type="Transferência">
+            <div class="mov-item__icon mov-item__icon--transfer" aria-hidden="true">
+              <i class="ti ti-building-store"></i>
+            </div>
+            <div class="mov-item__body">
+              <div class="mov-item__title">CAB-001 — Transferência de unidade</div>
+              <div class="mov-item__meta">Shopping Barra → Alameda Shopping · por Carol Santos</div>
+            </div>
+            <time class="mov-item__date">Ontem, 14:20</time>
+          </article>
+
+          <article class="mov-item" data-type="Troca responsável">
+            <div class="mov-item__icon mov-item__icon--person" aria-hidden="true">
+              <i class="ti ti-user"></i>
+            </div>
+            <div class="mov-item__body">
+              <div class="mov-item__title">SUG-001 — Troca de responsável</div>
+              <div class="mov-item__meta">Patrícia Lima → Carol Santos · Shopping Bela Vista</div>
+            </div>
+            <time class="mov-item__date">16/05, 11:00</time>
+          </article>
+
+          <article class="mov-item" data-type="Retorno">
+            <div class="mov-item__icon mov-item__icon--return" aria-hidden="true">
+              <i class="ti ti-check"></i>
+            </div>
+            <div class="mov-item__body">
+              <div class="mov-item__title">CAN-003 — Retorno de manutenção</div>
+              <div class="mov-item__meta">Disponível novamente · Shopping Barra</div>
+            </div>
+            <time class="mov-item__date">15/05, 09:00</time>
+          </article>
+        </div>
+      </section>
+
+    </main>
+  </div><!-- /.body-wrap -->
+
+  <!-- ===== MODAL: FORMULÁRIO (criar / editar) ===== -->
+  <div class="modal-overlay" id="modal-form" role="presentation">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-form-title">
+      <div class="modal__header gradient-animated">
+        <div class="modal__title">
+          <i class="ti ti-plus" aria-hidden="true"></i>
+          <span id="modal-form-title">Novo item</span>
+        </div>
+        <button class="modal__close" data-close="modal-form" aria-label="Fechar">
+          <i class="ti ti-x" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="modal__body">
+        <div class="form-grid-2">
+          <div class="form-field">
+            <label for="form-code">Código</label>
+            <input id="form-code" type="text" placeholder="ALC-001" />
+          </div>
+          <div class="form-field">
+            <label for="form-date">Data de aquisição</label>
+            <input id="form-date" type="date" />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="form-brand">Marca / modelo</label>
+          <input id="form-brand" type="text" placeholder="Ex: Mundial Pro" />
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-field">
+            <label for="form-shop">Shopping / unidade</label>
+            <select id="form-shop">
+              <option>Shopping Bela Vista</option>
+              <option>Shopping Barra</option>
+              <option>Alameda Shopping</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="form-person">Funcionária responsável</label>
+            <select id="form-person">
+              <option value="">— Nenhuma —</option>
+              <option>Carol Santos</option>
+              <option>Juliana Melo</option>
+              <option>Patrícia Lima</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-field">
+            <label for="form-status">Status</label>
+            <select id="form-status">
+              <option>Em uso</option>
+              <option>Disponível</option>
+              <option>Manutenção</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="form-notes">Observações</label>
+            <textarea id="form-notes" placeholder="Detalhes adicionais..."></textarea>
+          </div>
+        </div>
+
+        <div class="modal__footer">
+          <button class="btn-cancel" data-close="modal-form">Cancelar</button>
+          <button id="btn-save-form" class="btn-save gradient-animated">
+            <i class="ti ti-check" aria-hidden="true"></i> Salvar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: DETALHES ===== -->
+  <div class="modal-overlay" id="modal-detail" role="presentation">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-detail-title">
+      <div class="modal__header gradient-animated">
+        <div class="modal__title">
+          <i class="ti ti-eye" aria-hidden="true"></i>
+          <span id="modal-detail-title">Detalhes</span>
+        </div>
+        <button class="modal__close" data-close="modal-detail" aria-label="Fechar">
+          <i class="ti ti-x" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="modal__body" id="modal-detail-body"></div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: CONFIRMAR EXCLUSÃO ===== -->
+  <div class="modal-overlay" id="modal-delete" role="presentation">
+    <div class="modal modal--sm" role="dialog" aria-modal="true" aria-labelledby="modal-delete-title">
+      <div class="modal__header modal__header--danger">
+        <div class="modal__title" id="modal-delete-title">
+          <i class="ti ti-trash" aria-hidden="true"></i>
+          <span>Confirmar exclusão</span>
+        </div>
+        <button class="modal__close" data-close="modal-delete" aria-label="Fechar">
+          <i class="ti ti-x" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="modal__body">
+        <p style="font-size:13px;color:var(--color-text-secondary);line-height:1.6">
+          Tem certeza que deseja excluir o item
+          <strong id="delete-item-name"></strong>?
+          Esta ação não pode ser desfeita.
+        </p>
+        <div class="modal__footer">
+          <button class="btn-cancel" data-close="modal-delete">Cancelar</button>
+          <button id="btn-confirm-delete" class="btn-save" style="background:#A32D2D">
+            <i class="ti ti-trash" aria-hidden="true"></i> Excluir
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /#app -->
+
+<!-- ===== ANIMAÇÃO DE TRANSIÇÃO DE LOGIN ===== -->
+<div id="login-transition">
+  <div id="login-curtain" class="login-curtain gradient-animated"></div>
+  <div id="login-curtain-logo" class="login-curtain__logo">
+    <svg viewBox="0 0 80 72" fill="none" xmlns="http://www.w3.org/2000/svg"
+         width="72" aria-hidden="true">
+      <path d="M18 62 Q40 54 62 62 Q40 70 18 62Z" fill="white" opacity="0.35"/>
+      <path d="M18 52 Q10 36 20 22 Q22 38 28 50Z" fill="white" opacity="0.55"/>
+      <path d="M62 52 Q70 36 60 22 Q58 38 52 50Z" fill="white" opacity="0.55"/>
+      <path d="M28 52 Q22 30 32 14 Q36 32 36 50Z" fill="white" opacity="0.78"/>
+      <path d="M52 52 Q58 30 48 14 Q44 32 44 50Z" fill="white" opacity="0.78"/>
+      <path d="M36 52 Q36 22 40 8  Q44 22 44 52Z" fill="white" opacity="1.0"/>
+      <path d="M22 58 Q40 66 58 58" stroke="white" stroke-width="1.8" fill="none"
+            opacity="0.5" stroke-linecap="round"/>
+    </svg>
+    <div class="login-curtain__name">
+      Esmaltale
+      <small>especialistas em unhas</small>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TELA DE LOGIN ===== -->
+<div id="login-screen" class="login-screen is-visible" aria-label="Tela de login">
+  <div class="login-card">
+
+    <div class="login-card__left gradient-animated">
+      <div class="login-card__brand">
+        <svg viewBox="0 0 80 72" fill="none" xmlns="http://www.w3.org/2000/svg"
+             width="64" aria-hidden="true">
+          <style>
+            .llp-c  { transform-origin:40px 52px; animation:lotusBreath 3.5s ease-in-out infinite }
+            .llp-il { transform-origin:28px 52px; animation:lotusSwayL  3.5s ease-in-out infinite 0.1s }
+            .llp-ir { transform-origin:52px 52px; animation:lotusSwayR  3.5s ease-in-out infinite 0.1s }
+            .llp-ol { transform-origin:16px 52px; animation:lotusSwayLL 3.5s ease-in-out infinite 0.2s }
+            .llp-or { transform-origin:64px 52px; animation:lotusSwayRR 3.5s ease-in-out infinite 0.2s }
+            .llp-lf { transform-origin:40px 64px; animation:lotusBreath 4s   ease-in-out infinite 0.3s }
+          </style>
+          <path class="llp-lf" d="M18 62 Q40 54 62 62 Q40 70 18 62Z" fill="white" opacity="0.35"/>
+          <path class="llp-ol" d="M18 52 Q10 36 20 22 Q22 38 28 50Z" fill="white" opacity="0.55"/>
+          <path class="llp-or" d="M62 52 Q70 36 60 22 Q58 38 52 50Z" fill="white" opacity="0.55"/>
+          <path class="llp-il" d="M28 52 Q22 30 32 14 Q36 32 36 50Z" fill="white" opacity="0.78"/>
+          <path class="llp-ir" d="M52 52 Q58 30 48 14 Q44 32 44 50Z" fill="white" opacity="0.78"/>
+          <path class="llp-c"  d="M36 52 Q36 22 40 8  Q44 22 44 52Z" fill="white" opacity="1.0"/>
+          <path d="M22 58 Q40 66 58 58" stroke="white" stroke-width="1.8" fill="none"
+                opacity="0.5" stroke-linecap="round"/>
+        </svg>
+        <div class="login-card__brand-name">
+          Esmaltale
+          <small>especialistas em unhas</small>
+        </div>
+      </div>
+      <p class="login-card__tagline">Sistema interno de gestão e controle de materiais</p>
+    </div>
+
+    <div class="login-card__right">
+      <h1 class="login-card__title">Bem-vinda de volta</h1>
+      <p class="login-card__subtitle">Faça login para acessar o sistema</p>
+
+      <div class="login-field">
+        <label for="login-user">Usuário</label>
+        <div class="login-field__wrapper">
+          <i class="ti ti-user login-field__icon" aria-hidden="true"></i>
+          <input id="login-user" class="login-field__input" type="text"
+                 placeholder="seu.usuario" autocomplete="username" />
+        </div>
+      </div>
+
+      <div class="login-field">
+        <label for="login-pass">Senha</label>
+        <div class="login-field__wrapper">
+          <i class="ti ti-lock login-field__icon" aria-hidden="true"></i>
+          <input id="login-pass" class="login-field__input" type="password"
+                 placeholder="••••••••" autocomplete="current-password" />
+        </div>
+      </div>
+
+      <div id="login-error" class="login-error" role="alert">
+        Usuário ou senha incorretos. Tente novamente.
+      </div>
+
+      <button id="btn-login-submit" class="btn-login gradient-animated">
+        <i class="ti ti-login" aria-hidden="true"></i> Entrar
+      </button>
+
+      <footer class="login-footer">Esmaltale &copy; 2025 — uso interno</footer>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== SCRIPTS =====
+     Ordem de carregamento:
+     1. CDNs externos (SweetAlert2, XLSX)
+     2. swal.js      — configura EsmalSwal (depende de Swal)
+     3. data.js      — dados da aplicação
+     4. ui.js        — helpers: Theme, Session, Tooltip, shakeField, statusPillHtml
+     5. modal.js     — Modal (abrir/fechar modais)
+     6. export.js    — Exporter (depende de AppData, EsmalSwal, XLSX)
+     7. materials.js — CRUD e renderização (depende de AppData, Modal, EsmalSwal)
+     8. login.js     — Login (depende de Session, shakeField)
+     9. app.js       — inicialização e event listeners (depende de tudo acima)
+-->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="js/swal.js"></script>
+<script src="js/data.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/modal.js"></script>
+<script src="js/export.js"></script>
+<script src="js/materials.js"></script>
+<script src="js/login.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>

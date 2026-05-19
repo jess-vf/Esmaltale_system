@@ -1,0 +1,68 @@
+/* ==============================================
+   SWEETALERT2 — TEMA ESMALTALE
+   ============================================== */
+.esmal-swal__popup {
+  border-radius: 16px !important;
+  padding: 28px 32px 24px !important;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif !important;
+  box-shadow: 0 20px 60px rgba(123, 18, 80, .18) !important;
+  border: 0.5px solid #edd5e2 !important;
+}
+
+.esmal-swal__title {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: #1a0d13 !important;
+  margin-bottom: 6px !important;
+}
+
+.esmal-swal__confirm {
+  background: linear-gradient(
+    135deg,
+    #c4006e, #e8197a, #ff3d9a, #ff6ab4, #ff3d9a, #e0147a, #c4006e
+  ) !important;
+  background-size: 300% 300% !important;
+  animation: gradientFlow 7s ease infinite !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 10px !important;
+  padding: 10px 28px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  margin-top: 4px !important;
+  transition: opacity .15s, transform .15s !important;
+}
+
+.esmal-swal__confirm:hover {
+  opacity: .88 !important;
+  transform: translateY(-1px) !important;
+}
+
+.esmal-swal__timer {
+  background: linear-gradient(90deg, #e8197a, #ff6ab4) !important;
+  height: 3px !important;
+  border-radius: 2px !important;
+}
+
+/* Ícone de sucesso */
+.swal2-success-circular-line-left,
+.swal2-success-circular-line-right,
+.swal2-success-fix       { background: transparent !important }
+.swal2-success-ring      { border-color: #ffadd1 !important }
+.swal2-success-line-tip,
+.swal2-success-line-long { background: #e8197a !important }
+
+/* Animações de entrada/saída */
+@keyframes esmalSwalEnter {
+  from { opacity: 0; transform: scale(.85) translateY(16px) }
+  to   { opacity: 1; transform: scale(1)   translateY(0) }
+}
+
+@keyframes esmalSwalLeave {
+  from { opacity: 1; transform: scale(1) }
+  to   { opacity: 0; transform: scale(.9) translateY(8px) }
+}
+
+.esmal-swal--enter { animation: esmalSwalEnter .35s cubic-bezier(.34, 1.56, .64, 1) forwards !important }
+.esmal-swal--leave { animation: esmalSwalLeave .2s ease forwards !important }
