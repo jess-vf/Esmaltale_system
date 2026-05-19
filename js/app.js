@@ -113,7 +113,9 @@ function _bindActions() {
         openEditModal(id, key);
         break;
       case 'export':
-        Exporter.exportAll();
+        Exporter.exportAll().catch(() =>
+          EsmalSwal.fire({ icon: 'error', title: 'Erro ao exportar', text: 'Não foi possível gerar a planilha.' })
+        );
         break;
     }
   });

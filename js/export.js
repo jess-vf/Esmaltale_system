@@ -1,6 +1,6 @@
 /**
  * export.js
- * Exportação de todos os dados para planilha XLSX.
+ * Exportação de todos os dados para planilha XLSX com estilo completo (ExcelJS).
  */
 
 const Exporter = {
@@ -12,29 +12,51 @@ const Exporter = {
     { key: 'sugadores', label: 'Sugadores' },
   ],
 
-  COLUMNS: [
-    'Código', 'Marca / Modelo', 'Shopping / Unidade',
-    'Funcionária', 'Data de Aquisição', 'Status', 'Observações',
+  MAT_COLS: [
+    { header: 'Código',             key: 'id',     width: 12 },
+    { header: 'Marca / Modelo',     key: 'marca',  width: 26 },
+    { header: 'Shopping / Unidade', key: 'shop',   width: 28 },
+    { header: 'Funcionária',        key: 'func',   width: 22 },
+    { header: 'Data de Aquisição',  key: 'data',   width: 18 },
+    { header: 'Status',             key: 'status', width: 16 },
+    { header: 'Observações',        key: 'obs',    width: 34 },
   ],
 
-  COLUMN_WIDTHS: [
-    { wch: 12 }, { wch: 22 }, { wch: 24 },
-    { wch: 20 }, { wch: 18 }, { wch: 14 }, { wch: 30 },
+  MOV_COLS: [
+    { header: 'Material / Código', key: 'code', width: 18 },
+    { header: 'Tipo',              key: 'type', width: 22 },
+    { header: 'Descrição',         key: 'desc', width: 50 },
+    { header: 'Data',              key: 'date', width: 16 },
   ],
 
-  exportAll() {
-    const workbook = XLSX.utils.book_new();
+  GRADIENT_FROM: '8B5CF6',
+  GRADIENT_TO:   'F43F5E',
+  EVEN_BG:    'FFFFF0F6',
+  BORDER_CLR: 'FFD8A0BC',
+
+  async exportAll() {
+    const wb = new ExcelJS.Workbook();
+    wb.creator = 'Esmaltale System';
+    wb.created = new Date();
 
     this.CATEGORIES.forEach(({ key, label }) => {
-      const sheet = this._buildMaterialSheet(AppData[key]);
-      XLSX.utils.book_append_sheet(workbook, sheet, label);
+      this._buildMaterialSheet(wb.addWorksheet(label), AppData[key]);
     });
 
-    const movSheet = this._buildMovSheet();
-    XLSX.utils.book_append_sheet(workbook, movSheet, 'Movimentações');
+    this._buildMovSheet(wb.addWorksheet('Movimentações'));
 
     const filename = this._buildFilename();
-    XLSX.writeFile(workbook, filename);
+    const buffer   = await wb.xlsx.writeBuffer();
+    const blob     = new Blob([buffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    });
+
+    const url = URL.createObjectURL(blob);
+    const a   = Object.assign(document.createElement('a'), { href: url, download: filename });
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 
     EsmalSwal.fire({
       icon: 'success',
@@ -46,53 +68,86 @@ const Exporter = {
     });
   },
 
-  _buildMaterialSheet(items) {
-    const rows = [
-      this.COLUMNS,
-      ...items.map(r => [r.id, r.marca, r.shop, r.func, r.data, r.status, r.obs]),
-    ];
-    const sheet = XLSX.utils.aoa_to_sheet(rows);
-    sheet['!cols'] = this.COLUMN_WIDTHS;
-    this._styleHeader(sheet, this.COLUMNS.length);
-    return sheet;
+  _buildMaterialSheet(sheet, items) {
+    sheet.columns = this.MAT_COLS;
+    sheet.views   = [{ state: 'frozen', ySplit: 1 }];
+    this._styleHeader(sheet, this.MAT_COLS.length);
+
+    items.forEach((r, i) => {
+      const row = sheet.addRow({
+        id: r.id, marca: r.marca, shop: r.shop,
+        func: r.func, data: r.data, status: r.status, obs: r.obs,
+      });
+      this._styleDataRow(row, i, this.MAT_COLS.length, true);
+    });
   },
 
-  _buildMovSheet() {
-    const headers = ['Material / Código', 'Tipo', 'Descrição', 'Data'];
-    const rows    = [headers];
+  _buildMovSheet(sheet) {
+    sheet.columns = this.MOV_COLS;
+    sheet.views   = [{ state: 'frozen', ySplit: 1 }];
+    this._styleHeader(sheet, this.MOV_COLS.length);
 
+    let i = 0;
     document.querySelectorAll('#pg-movimentacoes .mov-item').forEach(el => {
       const title = el.querySelector('.mov-item__title')?.textContent.trim() ?? '';
       const meta  = el.querySelector('.mov-item__meta')?.textContent.trim()  ?? '';
       const date  = el.querySelector('.mov-item__date')?.textContent.trim()  ?? '';
       const type  = el.dataset.type ?? '';
       const code  = title.split('—')[0].trim();
-      rows.push([code, type, meta, date]);
+      const row   = sheet.addRow({ code, type, desc: meta, date });
+      this._styleDataRow(row, i++, this.MOV_COLS.length, false);
     });
-
-    const sheet = XLSX.utils.aoa_to_sheet(rows);
-    sheet['!cols'] = [{ wch: 14 }, { wch: 20 }, { wch: 46 }, { wch: 16 }];
-    this._styleHeader(sheet, headers.length);
-    return sheet;
   },
 
   _styleHeader(sheet, colCount) {
-    for (let c = 0; c < colCount; c++) {
-      const addr = XLSX.utils.encode_cell({ r: 0, c });
-      if (!sheet[addr]) continue;
-      sheet[addr].s = {
-        font:      { bold: true, color: { rgb: 'FFFFFF' } },
-        fill:      { fgColor: { rgb: 'E8197A' } },
-        alignment: { horizontal: 'center' },
-      };
+    const colors = this._gradientARGB(this.GRADIENT_FROM, this.GRADIENT_TO, colCount);
+    const row    = sheet.getRow(1);
+    row.height   = 24;
+    for (let c = 1; c <= colCount; c++) {
+      const cell     = row.getCell(c);
+      cell.font      = { bold: true, color: { argb: 'FFFFFFFF' }, size: 11, name: 'Calibri' };
+      cell.fill      = { type: 'pattern', pattern: 'solid', fgColor: { argb: colors[c - 1] } };
+      cell.alignment = { horizontal: 'center', vertical: 'middle' };
+      cell.border    = this._border();
     }
   },
 
+  _gradientARGB(fromHex, toHex, count) {
+    const parse = h => [
+      parseInt(h.slice(0, 2), 16),
+      parseInt(h.slice(2, 4), 16),
+      parseInt(h.slice(4, 6), 16),
+    ];
+    const [r1, g1, b1] = parse(fromHex);
+    const [r2, g2, b2] = parse(toHex);
+    const hex2 = n => n.toString(16).padStart(2, '0').toUpperCase();
+    return Array.from({ length: count }, (_, i) => {
+      const t = count === 1 ? 0 : i / (count - 1);
+      return `FF${hex2(Math.round(r1 + (r2 - r1) * t))}${hex2(Math.round(g1 + (g2 - g1) * t))}${hex2(Math.round(b1 + (b2 - b1) * t))}`;
+    });
+  },
+
+  _styleDataRow(row, index, colCount, wrapLast) {
+    const bg = index % 2 === 1 ? this.EVEN_BG : 'FFFFFFFF';
+    row.height = 18;
+    for (let c = 1; c <= colCount; c++) {
+      const cell     = row.getCell(c);
+      cell.font      = { size: 10, name: 'Calibri' };
+      cell.fill      = { type: 'pattern', pattern: 'solid', fgColor: { argb: bg } };
+      cell.alignment = { vertical: 'middle', wrapText: wrapLast && c === colCount };
+      cell.border    = this._border();
+    }
+  },
+
+  _border() {
+    const s = { style: 'thin', color: { argb: this.BORDER_CLR } };
+    return { top: s, left: s, bottom: s, right: s };
+  },
+
   _buildFilename() {
-    const today = new Date();
-    const dd    = String(today.getDate()).padStart(2, '0');
-    const mm    = String(today.getMonth() + 1).padStart(2, '0');
-    const yyyy  = today.getFullYear();
-    return `Esmaltale_Materiais_${dd}-${mm}-${yyyy}.xlsx`;
+    const d  = new Date();
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    return `Esmaltale_Materiais_${dd}-${mm}-${d.getFullYear()}.xlsx`;
   },
 };
