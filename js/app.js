@@ -53,6 +53,9 @@ function _bindModals() {
 
   document.getElementById('btn-save-form').addEventListener('click',     saveForm);
   document.getElementById('btn-confirm-delete').addEventListener('click', confirmDelete);
+  document.getElementById('btn-save-form').addEventListener('click',     saveForm);
+  document.getElementById('btn-confirm-delete').addEventListener('click', confirmDelete);
+  document.getElementById('form-person').addEventListener('change', e => onPersonChange(e.target));
 }
 
 /* ==============================================

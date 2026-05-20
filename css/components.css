@@ -222,6 +222,7 @@
 .sidebar__btn[data-page="canetas"]:hover i       { transform: scale(1.28) translateY(-3px) }
 .sidebar__btn[data-page="motores"]:hover i       { transform: scale(1.28) rotate(20deg) }
 .sidebar__btn[data-page="cabines"]:hover i       { transform: scale(1.28) translateY(-4px) scaleY(1.1) }
+.sidebar__btn[data-page="fontes"]:hover i     { transform: scale(1.28) translateX(3px) }
 .sidebar__btn[data-page="sugadores"]:hover i     { transform: scale(1.28) rotate(15deg) }
 .sidebar__btn[data-page="movimentacoes"]:hover i { transform: scale(1.28) rotate(180deg) }
 
@@ -229,6 +230,7 @@
 .sidebar__btn[data-page="canetas"].is-active i       { animation: animPencil 2s ease-in-out infinite }
 .sidebar__btn[data-page="motores"].is-active i       { animation: animMotor 1.8s linear infinite }
 .sidebar__btn[data-page="cabines"].is-active i       { animation: animCabine 2.2s ease-in-out infinite }
+.sidebar__btn[data-page="fontes"].is-active i { animation: animFonte 1.4s ease-in-out infinite }
 .sidebar__btn[data-page="sugadores"].is-active i     { animation: animSuction 1.6s ease-in-out infinite }
 .sidebar__btn[data-page="movimentacoes"].is-active i { animation: animExchange 2s ease-in-out infinite }
 
@@ -236,6 +238,7 @@
 @keyframes animPencil    { 0%,100%{transform:translateY(0) rotate(-5deg)} 50%{transform:translateY(-4px) rotate(5deg)} }
 @keyframes animMotor     { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
 @keyframes animCabine    { 0%,100%{transform:scale(1) translateY(0)} 40%{transform:scale(1.2) translateY(-3px)} 70%{transform:scale(1.08) translateY(-1px)} }
+@keyframes animFonte {0%,100% { transform: scale(1) rotate(0deg) }25%     { transform: scale(1.2) rotate(-10deg) }50%     { transform: scale(0.9) rotate(0deg) }75%     { transform: scale(1.15) rotate(10deg) }}
 @keyframes animSuction   { 0%,100%{transform:scale(1) rotate(0deg)} 30%{transform:scale(1.18) rotate(12deg)} 60%{transform:scale(0.92) rotate(-8deg)} }
 @keyframes animExchange  { 0%,100%{transform:rotate(0deg) scale(1)} 50%{transform:rotate(180deg) scale(1.15)} }
 

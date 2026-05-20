@@ -23,6 +23,34 @@ const NEW_LABEL = {
   sugadores: 'Novo sugador',
 };
 
+const PROFESSIONAL_COLORS = {
+  'Carol Santos':  { primary: '#1E90FF', primaryLabel: 'Azul',   secondary: '#FFFFFF', secondaryLabel: 'Branco'  },
+  'Juliana Melo':  { primary: '#2E8B1A', primaryLabel: 'Verde',  secondary: '#FF8C00', secondaryLabel: 'Laranja' },
+  'Patrícia Lima': { primary: '#FF69B4', primaryLabel: 'Rosa',   secondary: '#4169E1', secondaryLabel: 'Azul'    },
+};
+
+function onPersonChange(selectEl) {
+  const colors  = PROFESSIONAL_COLORS[selectEl.value];
+  const display = document.getElementById('form-color-display');
+  if (!display) return;
+  if (colors) {
+    display.innerHTML = _colorChipHtml(colors.primary, colors.primaryLabel)
+      + '<span style="color:var(--color-text-muted);font-size:12px;padding:0 2px"> / </span>'
+      + _colorChipHtml(colors.secondary, colors.secondaryLabel);
+  } else {
+    display.innerHTML = '<span style="font-size:12px;color:var(--color-text-muted)">— selecione um profissional —</span>';
+  }
+}
+
+function _colorChipHtml(hex, name) {
+  const border = hex.toLowerCase() === '#ffffff'
+    ? ';border:0.5px solid var(--color-border-strong)' : '';
+  return `<span style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:6px;border:0.5px solid var(--color-border);background:var(--color-surface2);font-size:12px">`
+    + `<span style="width:14px;height:14px;border-radius:3px;background:${hex}${border};flex-shrink:0"></span>`
+    + name
+    + `</span>`;
+}
+
 /* ==============================================
    NAVEGAÇÃO
    ============================================== */
@@ -275,14 +303,16 @@ function openEditModal(id, key) {
 }
 
 function _clearForm(prefix, nextIndex) {
-  document.getElementById('form-code').value             = '';
-  document.getElementById('form-code').placeholder       = `${prefix}-00${nextIndex}`;
-  document.getElementById('form-brand').value            = '';
-  document.getElementById('form-date').value             = '';
+  document.getElementById('form-code').value            = '';
+  document.getElementById('form-code').placeholder      = `${prefix}-00${nextIndex}`;
+  document.getElementById('form-brand').value           = '';
+  document.getElementById('form-date').value            = '';
   document.getElementById('form-shop').selectedIndex    = 0;
   document.getElementById('form-person').selectedIndex  = 0;
   document.getElementById('form-status').selectedIndex  = 0;
-  document.getElementById('form-notes').value            = '';
+  document.getElementById('form-notes').value           = '';
+  const disp = document.getElementById('form-color-display');
+  if (disp) disp.innerHTML = '<span style="font-size:12px;color:var(--color-text-muted)">— selecione um profissional —</span>';
 }
 
 function _fillForm(item) {
@@ -293,6 +323,7 @@ function _fillForm(item) {
   _selectByText('form-person', item.func);
   _selectByText('form-status', item.status);
   document.getElementById('form-notes').value = item.obs === '—' ? '' : item.obs;
+  onPersonChange(document.getElementById('form-person'));
 }
 
 function _selectByText(selectId, text) {
@@ -391,6 +422,13 @@ function openDetailModal(id, key) {
 }
 
 function _buildDetailHtml(item, key) {
+  const pColors = PROFESSIONAL_COLORS[item.func];
+  const colorValue = pColors
+    ? _colorChipHtml(pColors.primary, pColors.primaryLabel)
+      + '<span style="color:var(--color-text-muted);font-size:12px;padding:0 2px"> / </span>'
+      + _colorChipHtml(pColors.secondary, pColors.secondaryLabel)
+    : '—';
+
   return `
     <div class="detail-row">
       <span class="detail-row__label"><i class="ti ti-barcode"></i> Código</span>
@@ -401,12 +439,16 @@ function _buildDetailHtml(item, key) {
       <span class="detail-row__value">${item.marca}</span>
     </div>
     <div class="detail-row">
-      <span class="detail-row__label"><i class="ti ti-building-store"></i> Unidade atual</span>
+      <span class="detail-row__label"><i class="ti ti-building-store"></i> Unidade </span>
       <span class="detail-row__value">${item.shop}</span>
     </div>
     <div class="detail-row">
       <span class="detail-row__label"><i class="ti ti-user"></i> Funcionária</span>
       <span class="detail-row__value">${item.func}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-row__label"><i class="ti ti-palette"></i> Cor do profissional</span>
+      <span class="detail-row__value" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">${colorValue}</span>
     </div>
     <div class="detail-row">
       <span class="detail-row__label"><i class="ti ti-calendar"></i> Aquisição</span>
