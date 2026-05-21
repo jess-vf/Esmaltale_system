@@ -31,7 +31,7 @@ const Exporter = {
     { key: 'sugadores', label: 'Sugadores' },
   ],
 
-  COLUMNS: ['Código', 'Marca / Modelo', 'Shopping / Unidade', 'Funcionária', 'Data de Aquisição', 'Status', 'Observações'],
+  COLUMNS: ['Código', 'Marca / Modelo', 'Tipo', 'Shopping / Unidade', 'Categoria', 'Clube do Alicate', 'Data de Aquisição', 'Fornecedor', 'Profissional', 'Código por cor', 'Custo', 'Status', 'Observações'],
 
   COLUMN_WIDTHS: [
     { wch: 12 }, { wch: 22 }, { wch: 24 },

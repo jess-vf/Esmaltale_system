@@ -68,6 +68,9 @@
       <button class="sidebar__btn" data-page="cabines" title="Cabines">
         <i class="ti ti-box" aria-hidden="true"></i>
       </button>
+      <button class="sidebar__btn" data-page="fontes" title="Fontes">
+        <i class="ti ti-plug-connected" aria-hidden="true"></i>
+      </button>
       <button class="sidebar__btn" data-page="sugadores" title="Sugadores">
         <i class="ti ti-air-conditioning" aria-hidden="true"></i>
       </button>
@@ -96,6 +99,10 @@
       <section class="page" id="pg-cabines"
                data-key="cabines"  data-prefix="CAB"
                data-label="Cabines" data-icon="ti-box"></section>
+
+      <section class="page" id="pg-fontes"
+               data-key="fontes"  data-prefix="FON"
+               data-label="Fontes" data-icon="ti-plug-connected"></section>
 
       <section class="page" id="pg-sugadores"
                data-key="sugadores"  data-prefix="SUG"
@@ -163,6 +170,7 @@
             <option>Canetas</option>
             <option>Motores</option>
             <option>Cabines</option>
+            <option>Fontes</option>
             <option>Sugadores</option>
           </select>
           <select class="filter-select" data-action="filter-mov" data-filter="type">
@@ -259,33 +267,82 @@
         </button>
       </div>
       <div class="modal__body">
+
         <div class="form-grid-2">
           <div class="form-field">
             <label for="form-code">Código</label>
-            <input id="form-code" type="text" placeholder="ALC-001" />
+            <input id="form-code" type="text" placeholder="ALC-001"/>
           </div>
           <div class="form-field">
             <label for="form-date">Data de aquisição</label>
-            <input id="form-date" type="date" />
+            <input id="form-date" type="date"/>
           </div>
-        </div>
-
-        <div class="form-field">
-          <label for="form-brand">Marca / modelo</label>
-          <input id="form-brand" type="text" placeholder="Ex: Mundial Pro" />
         </div>
 
         <div class="form-grid-2">
           <div class="form-field">
-            <label for="form-shop">Shopping / unidade</label>
-            <select id="form-shop">
-              <option>Shopping Bela Vista</option>
-              <option>Shopping Barra</option>
-              <option>Alameda Shopping</option>
+            <label for="form-brand">Marca</label>
+            <select id="form-brand">
+              <option value="">— Selecione —</option>
+              <option>Staleks</option>
+              <option>Mundial</option>
+              <option>Clivagem</option>
+              <option>Outros</option>
             </select>
           </div>
           <div class="form-field">
-            <label for="form-person">Funcionária responsável</label>
+            <label for="form-type">Tipo</label>
+            <select id="form-type">
+              <option value="">— Selecione —</option>
+              <option>Corte</option>
+              <option>Cutícula</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-field">
+            <label for="form-shop">Unidade</label>
+            <select id="form-shop">
+              <option value="">— Selecione —</option>
+              <option value="SBV">SBV — Shopping Bela Vista</option>
+              <option value="PAR">PAR — Paralela</option>
+              <option value="PSB">PSB — Shopping da Bahia</option>
+              <option value="SSA">SSA — Salvador Shopping</option>
+              <option value="SDB">SDB — Salvador Norte</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="form-category">Categoria</label>
+            <select id="form-category">
+              <option value="">— Selecione —</option>
+              <option value="722">722</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-field">
+            <label for="form-clube">Clube do Alicate</label>
+            <select id="form-clube">
+              <option value="">— Selecione —</option>
+              <option value="sim">Sim</option>
+              <option value="nao">Não</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="form-supplier">Fornecedor</label>
+            <input id="form-supplier" type="text" placeholder="Nome do fornecedor"/>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-field">
+            <label for="form-cost">Custo</label>
+            <input id="form-cost" type="number" step="0.01" min="0" placeholder="0,00"/>
+          </div>
+          <div class="form-field">
+            <label for="form-person">Designado a profissional</label>
             <select id="form-person">
               <option value="">— Nenhuma —</option>
               <option>Carol Santos</option>
@@ -295,19 +352,26 @@
           </div>
         </div>
 
-        <div class="form-grid-2">
-          <div class="form-field">
-            <label for="form-status">Status</label>
-            <select id="form-status">
-              <option>Em uso</option>
-              <option>Disponível</option>
-              <option>Manutenção</option>
-            </select>
+        <div class="form-field">
+          <label>Cor do profissional</label>
+          <div id="form-color-display" style="display:flex;align-items:center;gap:6px;min-height:38px;flex-wrap:wrap">
+            <span style="font-size:12px;color:var(--color-text-muted)">— selecione um profissional —</span>
           </div>
-          <div class="form-field">
-            <label for="form-notes">Observações</label>
-            <textarea id="form-notes" placeholder="Detalhes adicionais..."></textarea>
-          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="form-notes">Observações</label>
+          <textarea id="form-notes" placeholder="Detalhes adicionais..."></textarea>
+        </div>
+
+        <div class="form-field">
+          <label for="form-status">Status</label>
+          <select id="form-status">
+            <option>Nenhuma</option>
+            <option>Em uso</option>
+            <option>Disponível</option>
+            <option>Manutenção</option>
+          </select>
         </div>
 
         <div class="modal__footer">
@@ -451,6 +515,5 @@
 <script src="js/materials.js"></script>
 <script src="js/login.js"></script>
 <script src="js/app.js"></script>
-
 </body>
 </html>

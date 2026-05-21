@@ -26,6 +26,11 @@ const AppData = {
     { id: 'CAB-001', marca: 'Cabine LED 36W', shop: 'Shopping Bela Vista', func: 'Carol Santos', data: '08/02/2024', status: 'Em uso',      obs: '—' },
     { id: 'CAB-002', marca: 'Cabine UV Pro',  shop: 'Shopping Barra',      func: '—',            data: '14/05/2024', status: 'Manutenção', obs: 'Lâmpada queimada' },
   ],
+  fontes: [
+    { id: 'FON-001', marca: 'Fonte 110V',     shop: 'Shopping Bela Vista', func: 'Carol Santos',  data: '10/01/2024', status: 'Em uso',      obs: '—' },
+    { id: 'FON-002', marca: 'Fonte 220V',     shop: 'Shopping Barra',      func: 'Juliana Melo',  data: '22/03/2024', status: 'Em uso',      obs: '—' },
+    { id: 'FON-003', marca: 'Fonte Bivolt',   shop: 'Alameda Shopping',    func: 'Patrícia Lima', data: '05/07/2024', status: 'Disponível', obs: '—' },
+  ],
   sugadores: [
     { id: 'SUG-001', marca: 'Sugador Lux 80W', shop: 'Alameda Shopping',    func: 'Juliana Melo',  data: '20/03/2024', status: 'Em uso',      obs: '—' },
     { id: 'SUG-002', marca: 'Sugador Pro 60W', shop: 'Shopping Bela Vista', func: 'Patrícia Lima', data: '11/06/2024', status: 'Disponível', obs: '—' },
