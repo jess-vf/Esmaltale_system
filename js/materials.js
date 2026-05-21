@@ -429,45 +429,62 @@ function _buildDetailHtml(item, key) {
       + _colorChipHtml(pColors.secondary, pColors.secondaryLabel)
     : '—';
 
+  const custo = item.custo
+    ? `R$ ${Number(item.custo).toFixed(2).replace('.', ',')}`
+    : '—';
+
   return `
     <div class="detail-row">
       <span class="detail-row__label"><i class="ti ti-barcode"></i> Código</span>
       <span class="detail-row__value"><span class="code-tag">${item.id}</span></span>
     </div>
     <div class="detail-row">
-      <span class="detail-row__label"><i class="ti ti-tag"></i> Marca / modelo</span>
-      <span class="detail-row__value">${item.marca}</span>
+      <span class="detail-row__label"><i class="ti ti-calendar"></i> Data de aquisição</span>
+      <span class="detail-row__value">${item.data || '—'}</span>
     </div>
     <div class="detail-row">
-      <span class="detail-row__label"><i class="ti ti-building-store"></i> Unidade </span>
-      <span class="detail-row__value">${item.shop}</span>
+      <span class="detail-row__label"><i class="ti ti-tag"></i> Marca</span>
+      <span class="detail-row__value">${item.marca || '—'}</span>
     </div>
     <div class="detail-row">
-      <span class="detail-row__label"><i class="ti ti-user"></i> Funcionária</span>
-      <span class="detail-row__value">${item.func}</span>
+      <span class="detail-row__label"><i class="ti ti-adjustments-horizontal"></i> Tipo</span>
+      <span class="detail-row__value">${item.tipo || '—'}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-row__label"><i class="ti ti-building-store"></i> Unidade</span>
+      <span class="detail-row__value">${item.shop || '—'}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-row__label"><i class="ti ti-grid-dots"></i> Categoria</span>
+      <span class="detail-row__value">${item.categoria || '—'}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-row__label"><i class="ti ti-star"></i> Clube do Alicate</span>
+      <span class="detail-row__value">${item.clube || '—'}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-row__label"><i class="ti ti-truck-delivery"></i> Fornecedor</span>
+      <span class="detail-row__value">${item.fornecedor || '—'}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-row__label"><i class="ti ti-coin"></i> Custo</span>
+      <span class="detail-row__value">${custo}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-row__label"><i class="ti ti-user"></i> Designado a profissional</span>
+      <span class="detail-row__value">${item.func || '—'}</span>
     </div>
     <div class="detail-row">
       <span class="detail-row__label"><i class="ti ti-palette"></i> Cor do profissional</span>
       <span class="detail-row__value" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">${colorValue}</span>
     </div>
     <div class="detail-row">
-      <span class="detail-row__label"><i class="ti ti-calendar"></i> Aquisição</span>
-      <span class="detail-row__value">${item.data}</span>
+      <span class="detail-row__label"><i class="ti ti-notes"></i> Observações</span>
+      <span class="detail-row__value" style="color:var(--color-text-muted)">${item.obs || '—'}</span>
     </div>
     <div class="detail-row">
       <span class="detail-row__label"><i class="ti ti-circle-check"></i> Status</span>
       <span class="detail-row__value">${statusPillHtml(item.status)}</span>
-    </div>
-    <div class="detail-row">
-      <span class="detail-row__label"><i class="ti ti-notes"></i> Observações</span>
-      <span class="detail-row__value" style="color:var(--color-text-muted)">${item.obs}</span>
-    </div>
-    <div style="margin-top:14px;padding-top:12px;border-top:0.5px solid var(--color-border)">
-      <div style="font-size:11px;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600;margin-bottom:10px">
-        Histórico recente
-      </div>
-      <div class="history-item"><div class="history-item__dot"></div>Transferido para unidade atual em 20/03/2025</div>
-      <div class="history-item"><div class="history-item__dot"></div>Troca de responsável em 05/02/2025</div>
     </div>
     <div class="modal__footer">
       <button class="btn-cancel" data-close="modal-detail">Fechar</button>
